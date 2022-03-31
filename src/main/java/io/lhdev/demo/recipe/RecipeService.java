@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
@@ -20,6 +21,10 @@ public class RecipeService {
     }
 
     public void addNewRecipe(Recipe recipe) {
-        System.out.println(recipe);
+        Optional<Recipe> recipeOptional = recipeRepository.findRecipeByName(recipe.getName());
+        if (recipeOptional.isPresent()) {
+            throw new IllegalStateException("recipe already exists");
+        }
+        recipeRepository.save(recipe);
     }
 }
